@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teka-Teki Logika Matematika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f8ff;--card:#fff;--ink:#1d2b44;--mut:#64748b;--pri:#2f7df6;--ok:#22a06b;--bad:#e5484d;--line:#dbe6f5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1726;--card:#18233a;--ink:#e8eefc;--mut:#93a4c3;--line:#2a3856}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font-family:"Fredoka","Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:clamp(15px,1.5vw,28px);touch-action:manipulation;user-select:none;-webkit-user-select:none;overflow:hidden}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px}
+#app{height:100%;display:flex;flex-direction:column}
+.setup{max-width:760px;margin:0 auto;padding:16px;height:100%;overflow:auto}
+h1{font-size:1.5em;text-align:center;margin:8px 0 2px}.sub{text-align:center;color:var(--mut);margin:4px 0 12px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.lv{display:flex;gap:8px;margin:8px 0 14px}
+.lv button,.mode{flex:1;padding:12px;background:var(--card);border:2px solid var(--line);color:var(--ink);font-weight:700}
+.lv button.on,.mode.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:8px 0 14px}
+.mode b{display:block;font-size:1.6em}
+.big{width:100%;background:var(--ok);color:#fff;font-weight:800;padding:16px;font-size:1.2em}
+#gm{display:grid;flex:1;min-height:0}
+.pn{container-type:size;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--card);border-right:3px solid var(--line);position:relative}
+.pn:last-child{border-right:0}
+.hd{flex:none;height:min(11cqw,5.5cqh);display:flex;align-items:center;justify-content:space-between;padding:0 2cqw;font-size:min(4.6cqw,2.6cqh);font-weight:700;color:#fff}
+.hd i{font-style:normal;padding:0 1.5cqw;cursor:pointer}
+.bar{flex:none;height:.9cqh;background:var(--line)}.bar b{display:block;height:100%;background:var(--ok)}
+.pz{flex:1 1 0;min-height:0;display:flex;flex-direction:column;padding:.8cqh 1cqw}
+.row{flex:1;display:flex;align-items:center;justify-content:center;gap:1.4cqw;border-bottom:1px dashed var(--line);border-radius:10px}
+.row.good{background:rgba(34,160,107,.15)}.row.bad{background:rgba(229,72,77,.13)}
+.sl{display:flex;flex-direction:column;align-items:center;font-size:min(10cqw,6.2cqh);line-height:1.05}
+.cb{display:inline-flex;align-items:center;justify-content:center;width:min(14cqw,9cqh);height:min(9cqw,5.6cqh);border:2px solid #3b5b85;border-radius:6px;font-size:min(6cqw,3.8cqh);font-weight:700;background:var(--card);color:var(--ink)}
+.sl .cb{margin-top:.15em}.cb.ans{border-color:var(--bad)}
+.cb.sel{border-color:var(--pri);box-shadow:0 0 0 3px rgba(47,125,246,.4)}
+.op,.eq,.mk{font-size:min(7cqw,4.2cqh);font-weight:800;padding-bottom:min(9cqw,5.6cqh)}
+.op{color:var(--ok)}.eq{display:flex;align-items:center;gap:.6cqw;white-space:nowrap}.eq .cb{font-size:min(6cqw,3.8cqh);margin-bottom:0}
+.eq.l{padding-bottom:min(9cqw,5.6cqh)}.mk{font-size:min(5cqw,3cqh);min-width:4cqw;padding-left:0}
+.eq.l .cb{margin-top:0}
+.msg{flex:none;min-height:min(7cqw,4cqh);text-align:center;font-weight:700;font-size:min(4cqw,2.4cqh);display:flex;align-items:center;justify-content:center;padding:0 1cqw}
+.msg.ok{color:var(--ok)}.msg.no{color:var(--bad)}
+.kp{flex:none;height:min(62cqw,36cqh);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,1fr);gap:1cqw;padding:1cqw}
+.kp div,.kp .a{display:flex;align-items:center;justify-content:center;background:var(--bg);border:2px solid var(--line);border-radius:10px;font-weight:800;font-size:min(7cqw,4.2cqh);color:var(--ink)}
+.kp div:active{background:var(--pri);color:#fff}
+.kp .a{grid-column:1/4;background:var(--ok);color:#fff;border:0}.kp .a.n{background:var(--pri)}
+.shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-1.5cqw)}75%{transform:translateX(1.5cqw)}}
+.fin{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2cqh;text-align:center;padding:3cqw;font-size:min(6cqw,3.6cqh);font-weight:700}
+.fin .t{font-size:min(20cqw,12cqh)}.fin .a{background:var(--pri);color:#fff;padding:1.5cqh 6cqw;border-radius:14px}
+
+body{background:radial-gradient(circle at 15% 0,rgba(255,160,80,.22),transparent 50%),radial-gradient(circle at 90% 100%,rgba(120,100,255,.22),transparent 50%),var(--bg)}
+.setup h1{background:linear-gradient(90deg,#ff7a45,#2fb36a,#7a6cf0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{box-shadow:0 8px 28px rgba(40,70,140,.12);backdrop-filter:blur(6px)}
+.big{background:linear-gradient(180deg,#34c58a,#1f9b68);box-shadow:0 5px 0 #157a52}
+.t0{--t1:rgba(255,120,80,.2);--t2:rgba(255,205,60,.18);--acc:#ff7a45}
+.t1{--t1:rgba(60,190,90,.22);--t2:rgba(170,220,60,.18);--acc:#2fb36a}
+.t2{--t1:rgba(80,150,255,.2);--t2:rgba(190,120,255,.2);--acc:#7a6cf0}
+.pn{background:linear-gradient(160deg,var(--t1),var(--t2)),var(--card)}
+.hd{background-image:linear-gradient(90deg,rgba(255,255,255,.25),rgba(0,0,0,.12));box-shadow:0 .6cqh 1.5cqh rgba(0,0,0,.2);position:relative;z-index:1}
+.hd .th{font-size:.8em;background:rgba(255,255,255,.25);border-radius:99px;padding:.15em .8em}
+@container (max-width:250px){.hd .th{display:none}}
+.bar b{background:linear-gradient(90deg,var(--acc),#ffd166);transition:width .4s}
+.row{background:color-mix(in srgb,var(--card) 65%,transparent);backdrop-filter:blur(4px);border:1px solid var(--line);border-radius:min(3cqw,2cqh);margin:.4cqh 0;box-shadow:0 .4cqh 1cqh rgba(0,0,0,.07)}
+.row.good{background:rgba(34,160,107,.24);animation:pop .4s}.row.bad{background:rgba(229,72,77,.2)}
+.sl em{font-style:normal;display:block;filter:drop-shadow(0 .5cqh .6cqh rgba(0,0,0,.28));animation:fl 3.2s ease-in-out infinite}
+.sl:nth-child(2n) em{animation-delay:-.9s}.sl:nth-child(3n) em{animation-delay:-1.7s}
+@keyframes fl{50%{transform:translateY(-.7cqh) rotate(-3deg)}}
+@keyframes pop{50%{transform:scale(1.03)}}
+.cb{border-radius:min(2cqw,1.4cqh);box-shadow:inset 0 .3cqh .6cqh rgba(0,0,0,.08)}
+.cb.sel{animation:glow 1.2s infinite;border-color:var(--acc)}
+@keyframes glow{50%{box-shadow:0 0 0 .9cqw rgba(47,125,246,.28)}}
+.kp div{background:linear-gradient(180deg,var(--card),var(--bg));box-shadow:0 .5cqh 0 var(--line);transition:transform .08s}
+.kp div:active{transform:translateY(.4cqh);box-shadow:0 .1cqh 0 var(--line)}
+.kp .a{background:linear-gradient(180deg,#34c58a,#1f9b68);box-shadow:0 .5cqh 0 #157a52}
+.kp .a.n{background:linear-gradient(180deg,#4a95ff,#2f6fe0);box-shadow:0 .5cqh 0 #2556b0}
+.fin .t{animation:pop 1.2s infinite}.fin .a{background:linear-gradient(180deg,#4a95ff,#2f6fe0);box-shadow:0 .6cqh 0 #2556b0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+.ib{display:flex;gap:1.2cqw}.hd i{display:flex;align-items:center;justify-content:center;width:min(8cqw,4.4cqh);height:min(8cqw,4.4cqh);padding:0;font-size:min(4.6cqw,2.6cqh);background:rgba(255,255,255,.28);border-radius:50%;box-shadow:0 .3cqh .6cqh rgba(0,0,0,.2)}.hd i:active{transform:scale(.9)}
+#tb{flex:none;display:flex;justify-content:space-between;align-items:center;gap:.6em;padding:.4em .8em}
+#tb button{padding:.35em 1em;font-weight:700;background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:99px;box-shadow:0 3px 0 var(--line)}
+#tb button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+#tt{font-weight:700;background:var(--card);border:2px solid var(--line);border-radius:99px;padding:.3em 1em;white-space:nowrap}
+.pz{padding-bottom:1.4cqh}.msg{margin:1.4cqh 0 .8cqh}
+.dlg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:9}
+.bx{background:var(--card);color:var(--ink);border-radius:18px;padding:1.2em 1.6em;text-align:center;max-width:90%;box-shadow:0 10px 40px rgba(0,0,0,.4);font-weight:600}
+.bx button{margin:.4em;padding:.6em 1.4em;font-weight:700;border-radius:12px}.bx .y{background:var(--ok);color:#fff}.bx .n{background:var(--line);color:var(--ink)}
+.kp{height:min(62cqw,31cqh)}
+.sl{font-size:min(9cqw,5.4cqh)}
+.cb,.eq .cb{height:min(8.5cqw,5cqh)}
+.op,.eq,.mk,.eq.l{padding-bottom:min(8.5cqw,5cqh)}
+.pz{overflow:hidden}.row{margin:.3cqh 0}
+.msg{margin:1cqh 0 .6cqh;position:relative;z-index:1;min-height:min(7cqw,4.4cqh);flex:none}
+#tb{font-size:clamp(13px,min(1.4vw,2.6vh),22px)}
+.pn{overflow:hidden}
+.kp{grid-template-rows:repeat(5,minmax(0,1fr));overflow:hidden}
+.kp div{line-height:1;min-height:0;padding:0}
+.pn.wd{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto}
+.pn.wd .hd,.pn.wd .bar{grid-column:1/3}
+.pn.wd .pz{grid-column:1;grid-row:3;padding-bottom:.6cqh}
+.pn.wd .msg{grid-column:1;grid-row:4;font-size:min(2.2cqw,4cqh);min-height:min(3cqw,5.5cqh);margin:.6cqh 0}
+.pn.wd .kp{grid-column:2;grid-row:3/5;height:auto}
+.pn.wd .fin{grid-column:1/3;grid-row:3/5;font-size:min(3cqw,6cqh)}.pn.wd .fin .t{font-size:min(10cqw,18cqh)}
+.pn.wd .hd{height:min(4.5cqw,7cqh);font-size:min(2.6cqw,4cqh)}
+.pn.wd .sl{font-size:min(5.2cqw,9.5cqh)}
+.pn.wd .cb,.pn.wd .eq .cb{width:min(7.5cqw,12cqh);height:min(4.2cqw,7.5cqh);font-size:min(3.2cqw,5cqh)}
+.pn.wd .op,.pn.wd .eq,.pn.wd .mk,.pn.wd .eq.l{font-size:min(3.8cqw,6cqh);padding-bottom:min(4.2cqw,7.5cqh)}
+.pn.wd .kp div{font-size:min(4cqw,7cqh)}
+@media (orientation:portrait) and (max-width:700px){
+#gm.c3,#gm.c4{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))}
+#gm.c3 .pn:last-child{grid-column:1/3}
+#gm.c3 .pn,#gm.c4 .pn{border-bottom:3px solid var(--line)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const TH=[{n:'Buah',i:'🍎',e:['🥭','🍎','🍉','🍌','🍇','🍓','🍊','🍍','🍐','🥝','🍒','🍑']},{n:'Sayur',i:'🥕',e:['🥕','🌽','🍅','🥦','🍆','🥔','🥒','🧅','🥬','🍄','🌶️','🧄']},{n:'Hewan',i:'🐘',e:['🐶','🐱','🐰','🐯','🦁','🐘','🐵','🐼','🐸','🐥','🦊','🐮']}];
+const MODES={add:['➕','Penjumlahan'],sub:['➖','Pengurangan'],mul:['✖️','Perkalian'],div:['➗','Pembagian'],mix:['🎲','Campuran']};
+const COL=['#2f7df6','#e5484d','#22a06b','#f59e0b'];
+const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+function ev(v,o){let r=v[0];o.forEach((p,i)=>{const n=v[i+1];r=p==='+'?r+n:p==='−'?r-n:p==='×'?r*n:r/n});return r}
+function distinct(g){let a,b,c;do{[a,b,c]=g()}while(a===b||b===c||a===c);return[a,b,c]}
+function gen(mode,lv){
+  const mx=[6,9,12][lv],fr=shuf(TH[G.s%3].e).slice(0,3);let v,rows,ask;
+  const R=(f,o)=>({f,o});
+  if(mode==='mix')mode=['add','sub','mul','div'][rnd(0,3)];
+  if(mode==='add'){v=distinct(()=>[rnd(2,mx),rnd(2,mx),rnd(2,mx)]);
+    rows=lv===0?[R([0,0,0],'++'),R([1,1,1],'++'),R([2,2,2],'++')]:lv===1?[R([0,0,0],'++'),R([0,1,1],'++'),R([1,2,2],'++')]:[R([0,0,0],'++'),R([1,1,0],'++'),R([2,2,1],'++')];
+    const pa=[[2,2,0],[1,1,2],[0,0,1],[2,1,1],[0,2,2],[1,0,0]];ask=lv===0?R(shuf([0,1,2]),'++'):R(pa[rnd(0,5)],'++')}
+  else if(mode==='sub'){v=lv===0?distinct(()=>{const h=Math.ceil(mx/2),c=rnd(1,h),b=c+rnd(1,h);return[b+c+rnd(1,h),b,c]}):distinct(()=>{const c=rnd(1,Math.ceil(mx/3)+1),b=2*c+rnd(1,3);return[2*b+rnd(1,mx),b,c]});
+    rows=lv===0?[R([0,0,0],'++'),R([0,1],'−'),R([1,2],'−')]:[R([0,0,0],'++'),R([0,1,1],'−−'),R([1,2,2],'−−')];ask=R([0,1,2],'−−')}
+  else if(mode==='mul'){const m=[5,7,9][lv];v=distinct(()=>[rnd(2,m),rnd(2,m),rnd(2,m)]);
+    rows=[R([0,0],'×'),R([0,1],'×'),R([1,2],'×')];ask=R([0,2],'×')}
+  else{let c,m,k;do{c=rnd(2,lv+2);m=rnd(2,lv+2);k=rnd(2,lv+2);v=[c*m*k,c*m,c]}while(new Set(v).size<3);
+    rows=[R([0,0,0],'++'),R([0,1],'÷'),R([1,2],'÷')];ask=R([0,2],'÷')}
+  const val=r=>ev(r.f.map(i=>v[i]),[...r.o]);
+  return{fr,v,rows:rows.map(r=>({...r,val:val(r)})),ask,ans:val(ask)};
+}
+const rs=q=>q.rows.concat([q.ask]);
+const ids=q=>{const a=[];rs(q).forEach((r,i)=>r.f.forEach((_,k)=>a.push('c'+i+'_'+k)));a.push('ans');return a};
+const expv=(q,id)=>id==='ans'?q.ans:q.v[rs(q)[+id[1]].f[+id[3]]];
+const app=document.getElementById('app');
+let G={np:2,lv:0,mode:'add',s:0},P=[];
+function setup(){RO.disconnect();
+  app.innerHTML=`<div class="setup"><h1>🍎🥕🐘 Teka-Teki Logika Matematika</h1><p class="sub">Tiap pemain punya layar sendiri dan boleh menyentuh bersamaan!</p>
+  <div class="card"><b>Jumlah pemain</b><div class="lv">${[1,2,3,4].map(n=>`<button class="${G.np===n?'on':''}" onclick="G.np=${n};setup()">${n}</button>`).join('')}</div>
+  <b>Tingkat</b><div class="sub" style="margin:2px 0 0;font-size:.8em">Mudah: tiga buah sama · Sedang: buah campur · Sulit: campur + angka besar</div><div class="lv">${['Mudah','Sedang','Sulit'].map((t,i)=>`<button class="${G.lv===i?'on':''}" onclick="G.lv=${i};setup()">${t}</button>`).join('')}</div>
+  <b>Operasi</b><div class="grid">${Object.entries(MODES).map(([k,[e,n]])=>`<button class="mode ${G.mode===k?'on':''}" onclick="G.mode='${k}';setup()"><b>${e}</b>${n}</button>`).join('')}</div>
+  <button class="big" onclick="start()">▶ Mulai Main</button></div><p class="sub">Tema berganti tiap sesi: 🍎 Buah → 🥕 Sayur → 🐘 Hewan. Di HP, putar ke landscape untuk 3–4 pemain.</p></div>`;
+}
+const gcls=()=>'t'+(G.s%3)+' c'+G.np;
+const RO=new ResizeObserver(es=>es.forEach(e=>{const r=e.contentRect;e.target.classList.toggle('wd',r.width/r.height>1.25)}));
+function newSet(){G.qs=Array.from({length:10},()=>gen(G.mode,G.lv))}
+function tt(){document.getElementById('tt').textContent=TH[G.s%3].i+' '+TH[G.s%3].n+' · Sesi '+(G.s+1)}
+function ask(m,fn){const d=document.createElement('div');d.className='dlg';d.innerHTML='<div class="bx"><p>'+m+'</p><button class="y">Ya</button><button class="n">Batal</button></div>';d.querySelector('.y').onclick=()=>{d.remove();fn()};d.querySelector('.n').onclick=()=>d.remove();document.body.appendChild(d)}
+function goHome(){ask('Kembali ke beranda? Permainan akan berhenti.',setup)}
+function resetAll(){ask('Ganti dengan soal acak baru untuk semua pemain? Skor akan diulang.',()=>{newSet();P.forEach(x=>{clearTimeout(x.tm);Object.assign(x,{n:0,score:0,done:false});nextQ(x)})})}
+function start(){G.s=0;newSet();
+  app.innerHTML=`<div id="tb"><button onclick="goHome()">🏠 Beranda</button><span id="tt"></span><button onclick="resetAll()">🔄 Soal Baru</button></div><div id="gm" class="${gcls()}" style="grid-template-columns:repeat(${G.np},minmax(0,1fr))">${Array.from({length:G.np},()=>'<div class="pn"></div>').join('')}</div>`;
+  P=[...document.querySelectorAll('.pn')].map((el,i)=>{
+    const p={i,el,n:0,score:0,mode:G.mode,lv:G.lv,tm:0};
+    el.addEventListener('pointerdown',e=>tap(p,e));RO.observe(el);return p});
+  tt();P.forEach(nextQ);
+}
+function nextQ(p){
+  if(p.n>=10){p.done=true;P.forEach(x=>x.done&&R(x));return}
+  Object.assign(p,{q:G.qs[p.n],n:p.n+1,inp:{},mk:[],tries:0,hint:false,lock:false,msg:'',mc:'',sel:'c0_0',fresh:true});R(p);
+}
+function R(p){
+  const q=p.q,h=`<div class="hd" style="background:${COL[p.i]}"><span>Pemain ${p.i+1}</span><span>⭐ ${p.score}</span></div>`;
+  if(p.done){const all=P.every(x=>x.done),mx=Math.max(...P.map(x=>x.score)),st=p.score>=80?3:p.score>=50?2:1;
+    p.el.innerHTML=h+`<div class="fin"><div class="t">${'⭐'.repeat(st)}</div><div>Skor: ${p.score} / 100</div><div>${all&&P.length>1?(p.score===mx?'🏆 Juara!':'Semangat!'):(P.length>1?'Menunggu pemain lain…':'')}</div>${all?`<div class="a" data-a="again">Sesi Berikutnya ${TH[(G.s+1)%3].i} ➜</div>`:''}</div>`;return}
+  const cell=id=>`<div class="cb ${id==='ans'?'ans':''} ${p.sel===id?'sel':''}" data-c="${id}">${p.inp[id]||''}</div>`;
+  const rows=rs(q).map((r,i)=>`<div class="row ${p.mk[i]===true?'good':p.mk[i]===false?'bad':''}">${r.f.map((x,k)=>(k?`<span class="op">${r.o[k-1]}</span>`:'')+`<span class="sl"><em>${q.fr[x]}</em>${cell('c'+i+'_'+k)}</span>`).join('')}<span class="eq ${i===3?'l':''}">= ${i===3?cell('ans'):r.val}</span><span class="mk">${p.mk[i]===true?'✅':p.mk[i]===false?'❌':''}</span></div>`).join('');
+  const keys=['1','2','3','4','5','6','7','8','9','⌫','0','💡'].map(k=>`<div data-k="${k}">${k}</div>`).join('');
+  p.el.innerHTML=h+`<div class="bar"><b style="width:${(p.n-1)*10}%"></b></div><div class="pz ${p.shk?'shake':''}">${rows}</div><div class="msg ${p.mc}">${p.msg||(p.hint?'💡 '+q.fr[0]+' = '+q.v[0]+' · maks 5 poin':'Soal '+p.n+' dari 10')}</div><div class="kp">${keys}<div class="a ${p.lock?'n':''}" data-a="${p.lock?'next':'chk'}">${p.lock?'Lanjut ➜':'Cek Jawaban'}</div></div>`;
+  p.shk=0;
+}
+function tap(p,e){
+  const t=e.target.closest('[data-c],[data-k],[data-a]');if(!t)return;e.preventDefault();
+  if(t.dataset.c){if(!p.lock){clearTimeout(p.tm);p.sel=t.dataset.c;p.fresh=true;R(p)}}
+  else if(t.dataset.k)key(p,t.dataset.k);
+  else{const a=t.dataset.a;
+    if(a==='chk')check(p);else if(a==='next')nextQ(p);
+    else if(a==='again'){if(P.every(x=>x.done)){G.s++;newSet();tt();document.getElementById('gm').className=gcls();P.forEach(x=>{Object.assign(x,{n:0,score:0,done:false});nextQ(x)})}}
+    else if(a==='reset'){if(!p.lock&&!p.done){clearTimeout(p.tm);p.n--;nextQ(p)}}
+    else if(a==='menu'&&confirm('Kembali ke menu? Permainan akan berhenti.'))setup()}
+}
+function adv(p){const a=ids(p.q),i=a.indexOf(p.sel);if(a[i+1]){p.sel=a[i+1];p.fresh=true}}
+function key(p,k){
+  if(p.lock||p.done)return;clearTimeout(p.tm);
+  if(k==='💡'){p.hint=true;p.msg='';p.mc='';R(p);return}
+  const id=p.sel,cur=p.inp[id]||'';p.mk=[];p.msg='';p.mc='';
+  if(k==='⌫'){p.inp[id]=cur.slice(0,-1);p.fresh=false}
+  else{const v=(p.fresh?'':cur)+k;if(v.length>3)return;p.fresh=false;p.inp[id]=v;
+    if(v.length>=String(expv(p.q,id)).length)adv(p);
+    else p.tm=setTimeout(()=>{if(p.sel===id){adv(p);R(p)}},450)}
+  R(p);
+}
+function check(p){
+  const q=p.q,g=id=>(p.inp[id]===undefined||p.inp[id]==='')?null:Number(p.inp[id]);
+  if(ids(q).some(id=>g(id)===null)){p.mk=[];p.msg='Isi semua kotak dulu ya!';p.mc='no';R(p);return}
+  p.mk=rs(q).map((r,i)=>ev(r.f.map((_,k)=>g('c'+i+'_'+k)),[...r.o])===(i===3?g('ans'):r.val)&&r.f.every((x,k)=>g('c'+i+'_'+k)===q.v[x]));
+  if(p.mk.every(Boolean)&&g('ans')===q.ans){const pt=p.hint?5:(p.tries===0?10:7);p.score+=pt;p.lock=true;p.msg=`🎉 Benar! +${pt}${p.hint?' (pakai petunjuk)':''}`;p.mc='ok'}
+  else{p.tries++;p.mc='no';
+    if(p.tries>=3){rs(q).forEach((r,i)=>r.f.forEach((x,k)=>p.inp['c'+i+'_'+k]=q.v[x]));p.inp.ans=q.ans;p.mk=[true,true,true,true];p.lock=true;p.msg=`Jawabannya ${q.ans}. Lanjut ya!`}
+    else{p.msg=`Belum tepat, cek baris merah! (${p.tries}/3)`;p.shk=1}}
+  R(p);
+}
+setup();
+</script>
+</body>
+</html>
